@@ -24,7 +24,7 @@ class FeedController extends Controller
         $data = [];
         foreach ($items as $item)
         {
-            $publishedDate = Carbon::make($item->data['date']['raw']);
+            $publishedDate = Carbon::make($item->data['child']['']['pubDate'][0]['data']);
             $itemData['title'] =  trim(preg_replace('/\s+/', ' ', $item->data['child']['']['title'][0]['data']));
             $itemData['image'] = $item->data['child']['']['enclosure'][0]['attribs']['']['url'];
             $imageSize = getimagesize($itemData['image']);
