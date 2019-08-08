@@ -16,3 +16,4 @@ Route::get('/', function () {
 });
 
 Route::get('/{username}', 'FeedController@show');
+Route::get('/geo/{location}', 'FeedController@showGeo');

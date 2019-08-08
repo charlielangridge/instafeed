@@ -40,4 +40,29 @@ class FeedController extends Controller
 
     }
 
+    public function showGeo($location)
+    {
+        $instagramFeed = 'https://queryfeed.net/instagram?q=geo%3A'.$location;
+        $feed = FeedsFacade::make($instagramFeed);
+        $items = $feed->get_items();
+
+        $data = [];
+        foreach ($items as $item)
+        {
+            $publishedDate = Carbon::make($item->data['child']['']['pubDate'][0]['data']);
+            $itemData['title'] =  trim(preg_replace('/\s+/', ' ', $item->data['child']['']['title'][0]['data']));
+            $itemData['image'] = $item->data['child']['']['enclosure'][0]['attribs']['']['url'];
+            $imageSize = getimagesize($itemData['image']);
+            $itemData['w'] = $imageSize[0];
+            $itemData['h'] = $imageSize[1];
+            $itemData['pubDate'] = $publishedDate->format('r');
+            array_push($data, $itemData);
+        }
+
+        $content = View::make('geofeed')->with(compact('location', 'data'));
+
+        return Response::make($content, '200')->header('Content-Type', 'text/xml');
+
+    }
+
 }
